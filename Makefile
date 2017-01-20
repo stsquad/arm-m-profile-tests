@@ -9,7 +9,7 @@ endif
 
 DEBUG=-g
 
-CFLAGS=-mcpu=cortex-m3 -mthumb -ffreestanding -nostdlib -nostartfiles -nodefaultlibs $(DEBUG) -Wall -Wextra -Werror
+CFLAGS=-mcpu=cortex-m3 -mthumb -ffreestanding -nostdlib -nostartfiles -nodefaultlibs $(DEBUG) -Wall -Wextra -Werror -Wl,--build-id=none
 LDFLAGS=-static
 
 CFLAGS+=-Os
