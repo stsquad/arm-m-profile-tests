@@ -13,7 +13,7 @@ unsigned testseq;
 static inline
 void test_equal(const char *m, uint32_t expect, uint32_t actual)
 {
-    testEqI(expect, actual, m);
+    testEqI(expect, actual, "%s", m);
 }
 
 extern char _main_stack_top, _proc_stack_top;
