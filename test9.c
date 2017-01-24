@@ -32,11 +32,14 @@ struct early_state_t {
 
 void main(void)
 {
-    testInit(20);
+    testInit(19);
 #define TEST(FLD, VAL) testEqI(VAL, early_state.FLD, #FLD)
     TEST(marker, 0xdeadbeaf); /* check consistency w/ init-m-test9.S */
     TEST(LR, 0xffffffff);
-    TEST(XPSR, 0);
+    /* XPSR is generally architecturally UNKNOWN on reset, so don't test it */
+    puts("# XPSR ");
+    puthex(early_state.XPSR);
+    putc('\n');
     TEST(PRIMASK, 0);
     TEST(FAULTMASK, 0);
     TEST(BASEPRI, 0);
