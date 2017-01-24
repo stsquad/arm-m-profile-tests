@@ -25,6 +25,7 @@ all: test9-kern.bin
 all: test10-kern.bin
 all: test11-kern.bin
 all: test12-kern.bin
+all: test13-kern.bin
 
 test1-kern.elf: cortexm.ld common.ld setup.o armv7m.o init-m.o testme.o test1.o
 test3-kern.elf: cortexm.ld common.ld setup.o armv7m.o init-m.o test3.o
@@ -37,6 +38,7 @@ test9-kern.elf: cortexm.ld common.ld setup.o armv7m.o init-m-test9.o testme.o te
 test10-kern.elf:cortexm.ld common.ld setup.o armv7m.o init-m.o testme.o test10.o
 test11-kern.elf:cortexm.ld common.ld setup.o armv7m.o init-m.o test11-buserr.o inst_skip.o
 test12-kern.elf:cortexm.ld common.ld setup.o test12.o
+test13-kern.elf:cortexm.ld common.ld setup.o armv7m.o init-m.o test13-undef.o inst_skip.o testme.o
 
 clean:
 	rm -f *.o *.elf *.map *.bin *.img
