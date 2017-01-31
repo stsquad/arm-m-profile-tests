@@ -1,35 +1,44 @@
 = Build
 
-Needs a cross GCC ARM tool chain supporting cortex-m3.  Since -ffreestanding is used, any
-GCC should be usable, regardless of the target OS.
+Needs a cross GCC ARM tool chain supporting cortex-m3.  Since
+-ffreestanding is used, any GCC should be usable, regardless of the
+target OS.
 
 Debian users can install
 
 apt-get install gcc-arm-none-eabi gdb-arm-none-eabi
 
-Others should change PREFIX= in the Makefile.
+The gcc-arm-linux-gnueabihf packages will also work.
+
+If your compiler isn't in /usr/bin, then specify PREFIX=/where/it/is to Make.
 
 = Run tests
 
-# Basic load test
-qemu-system-arm -M lm3s6965evb -m 16 -no-reboot -serial stdio -d unimp,guest_errors -kernel test1-kern.bin
-# Check initial register states
-qemu-system-arm -M lm3s6965evb -m 16 -no-reboot -serial stdio -d unimp,guest_errors -kernel test9-kern.bin
-# Check register exception handling register states
-qemu-system-arm -M lm3s6965evb -m 16 -no-reboot -serial stdio -d unimp,guest_errors -kernel test10-kern.bin
-# Handling of external (NVIC) exceptions
-qemu-system-arm -M lm3s6965evb -m 16 -no-reboot -serial stdio -d unimp,guest_errors -kernel test4-kern.bin
-# Thread mode Unprivlaged and processs stack
-qemu-system-arm -M lm3s6965evb -m 16 -no-reboot -serial stdio -d unimp,guest_errors -kernel test5-kern.bin
-# Exception masking and escalation
-qemu-system-arm -M lm3s6965evb -m 16 -no-reboot -serial stdio -d unimp,guest_errors -kernel test3-kern.bin
-# Test unrecoverable exception
-qemu-system-arm -M lm3s6965evb -m 16 -no-reboot -serial stdio -d unimp,guest_errors -kernel test6-kern.bin
-# Test magic exception return from thread mode
-qemu-system-arm -M lm3s6965evb -m 16 -no-reboot -serial stdio -d unimp,guest_errors -kernel test7-kern.bin
-# Test MPU
-qemu-system-arm -M lm3s6965evb -m 16 -no-reboot -serial stdio -d unimp,guest_errors -kernel test8-kern.bin
-# Various access fault handling and recovery
-qemu-system-arm -M lm3s6965evb -m 16 -no-reboot -serial stdio -d unimp,guest_errors -kernel test11-kern.bin
-# Invalid exception table entry (not thumb mode)
-qemu-system-arm -M lm3s6965evb -m 16 -no-reboot -serial stdio -d unimp,guest_errors -kernel test12-kern.bin
+The 'runtests.sh' script takes two optional arguments: the first is the
+QEMU binary to use (default "qemu-system-arm") and the second is the
+PREFIX to pass to make, if any.
+
+The tests run by runtests.sh are:
+
+test1-kern.bin:  basic load test
+test9-kern.bin:  check initial register states
+test10-kern.bin: check register exception handling register states
+test4-kern.bin:  handling of external (NVIC) exceptions
+test5-kern.bin:  thread mode unprivileged and process stack handling
+test13-kern.bin: UsageFaults
+
+Tests which aren't currently run:
+
+test3-kern.bin:  exception masking and escalation
+test6-kern.bin:  unrecoverable exception
+test7-kern.bin:  magic exception return from thread mode
+test8-kern.bin:  test MPU
+test11-kern.bin: various access fault handling and recovery
+test12-kern.bin: invalid exception table entry (not Thumb mode)
+
+These are not run by runtests.sh because either:
+ (1) they haven't been updated to use the TAP test output format
+ (2) they don't yet pass on QEMU
+
+You can hand-run a test with the command
+ qemu-system-arm -no-reboot -M lm3s6965evb -m 16 -serial stdio -display none -net nic -net user,restrict=on -d guest_errors,unimp -kernel test-whatever-kern.bin
