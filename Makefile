@@ -1,6 +1,6 @@
 
 PREFIX=/usr/bin
-GCC=$(firstword $(wildcard $(PREFIX)/arm*-eabi-gcc))
+GCC=$(firstword $(wildcard $(PREFIX)/arm-*eabi*-gcc))
 OBJCOPY=$(firstword $(wildcard $(PREFIX)/arm*objcopy))
 
 ifeq ($(GCC),)
