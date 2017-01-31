@@ -1,12 +1,30 @@
 #!/bin/sh
 set -e
 
+# Usage: runtests.sh [/path/to/qemu-system-arm] [toolchain-prefix]
+
 die() {
   echo "$1" >&2
   exit 1
 }
 
-QEMU="$QDIR/usr/bin/qemu-system-arm"
+QEMU=qemu-system-arm
+MAKEARGS=
+
+if [ $# != 0 ]; then
+    QEMU="$1"
+    shift
+fi
+
+if [ $# != 0 ]; then
+    MAKEARGS="PREFIX=$1"
+    shift
+fi
+
+if [ $# != 0 ]; then
+    die "Usage: runtests.sh [/path/to/qemu-system-arm] [toolchain-prefix]"
+fi
+
 ARGS="-no-reboot -M lm3s6965evb -m 16 -serial stdio -display none -net nic -net user,restrict=on -d guest_errors,unimp"
 
 $QEMU --version
@@ -31,7 +49,7 @@ dotest() {
   fi
 }
 
-make PREFIX="$XDIR/usr/bin"
+make $MAKEARGS
 
 dotest test1-kern.bin
 dotest test9-kern.bin

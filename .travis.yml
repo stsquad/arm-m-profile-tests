@@ -18,4 +18,4 @@ cache:
 env:
  - QDIR="/home/travis/.cache/qemu" XDIR="/home/travis/.cache/x-tools"
 install: ./build-toolchain.sh
-script: ./runtests.sh </dev/null
+script: ./runtests.sh /home/travis/.cache/qemu/usr/bin/qemu-system-arm /home/travis/.cache/x-tools/usr/bin </dev/null
