@@ -182,5 +182,20 @@ void main(void)
     }
     show_control(0, 0);
 
+    /* If we didn't manage to get back into privileged mode
+     * for some reason then we're still running on the PSP stack,
+     * and trying to return from this function will crash.
+     * To avoid that, abort if we're still in user mode.
+     */
+    {
+        uint32_t actrl;
+        __asm__ ("mrs %0,CONTROL" : "=r"(actrl) ::);
+
+        if (actrl != 0) {
+            testDiag("failed to return to privileged stack: aborting");
+            abort();
+        }
+    }
+
     testDiag("Done.");
 }
